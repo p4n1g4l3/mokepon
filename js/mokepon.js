@@ -30,34 +30,43 @@ function iniciarJuego(){
     botonReiniciar.addEventListener("click",reiniciarJuego)
 }
 
-function seleccionarMascotaJugador(){
+function seleccionarMascotaJugador() {
+    // Lista completa de Mokepons (fácil de actualizar)
+    const mokepons = [
+        { id: "hipodoge", nombre: "Hipodoge" },
+        { id: "capipepo", nombre: "Capipepo" },
+        { id: "Dravernix", nombre: "Dravernix" },
+        { id: "Tenebrix", nombre: "Tenebrix" },
+        { id: "Ocelevian", nombre: "Ocelevian" }
+    ];
 
-    let sectionSeleccionarMascota= document.getElementById("seleccionar-mascota")
-    sectionSeleccionarMascota.style.display = "none"
+    // Resetear selección visual
+    document.querySelectorAll('.tarjeta-de-mokepon').forEach(tarjeta => {
+        tarjeta.classList.remove('seleccionado');
+    });
 
-    let sectionSeleccionarAtaque= document.getElementById("seleccionar-ataque")
-    sectionSeleccionarAtaque.style.display = "flex"
+    // Buscar cuál está seleccionado
+    const mokeponSeleccionado = mokepons.find(m => 
+        document.getElementById(m.id).checked
+    );
 
-    // seleccionar Mascota de Jugador:
-    let hipodogeSeleccionado = document.getElementById("hipodoge").checked
-    let capipepoSeleccionado = document.getElementById("capipepo").checked
-    let dravernixSeleccionado = document.getElementById("Dravernix").checked
-    let tenebrixSeleccionado = document.getElementById("Tenebrix").checked
-    let ocelevianSeleccionado = document.getElementById("Ocelevian").checked
-
-    if (hipodogeSeleccionado){
-        spanMascotaJugador.innerHTML = "Hipodoge"
-    }else if(capipepoSeleccionado){
-        spanMascotaJugador.innerHTML = "Capipepo"
-    }else if(dravernixSeleccionado){
-        spanMascotaJugador.innerHTML = "Dravernix"
-    }else if(tenebrixSeleccionado){
-        spanMascotaJugador.innerHTML = "Tenebrix"
-    }else if(ocelevianSeleccionado){
-        spanMascotaJugador.innerHTML = "Ocelevian"
-    }else{
-        alert("Debes seleccionar una Mascota")
+    if (!mokeponSeleccionado) {
+        alert("¡Debes seleccionar una Mascota!");
+        return; // Detiene la función si no hay selección
     }
+
+    // Aplicar efectos visuales
+    document.querySelector(`label[for="${mokeponSeleccionado.id}"]`)
+        .classList.add('seleccionado');
+    
+    document.getElementById("mascota-jugador").innerHTML = 
+        mokeponSeleccionado.nombre;
+
+    // Mostrar sección de ataques
+    document.getElementById("seleccionar-mascota").style.display = "none";
+    document.getElementById("seleccionar-ataque").style.display = "flex";
+
+    seleccionarMascotaEmemigo();
 }
 
 function seleccionarMascotaEmemigo(){
@@ -140,14 +149,13 @@ function revisarVidas(){
 }
 
 function crearMensaje(resultado){
-
     let sectionMensajes = document.getElementById("resultado")
     let ataquesDelJugador = document.getElementById("ataques-del-jugador")
     let ataquesDelEnemigo = document.getElementById("ataques-del-enemigo")
 
     sectionMensajes.innerHTML = resultado
-    ataquesDelJugador.innerHTML = ataqueJugador
-    ataquesDelEnemigo.innerHTML = ataqueEnemigo
+    ataquesDelJugador.innerHTML += `${ataqueJugador} | `
+    ataquesDelEnemigo.innerHTML += `${ataqueEnemigo} | `
 }
 
 function crearMensajeFinal(resultadoFinal){

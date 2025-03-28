@@ -34,15 +34,15 @@ body{
 
 .tarjetas{
     display: flex;
-    gap: 5px;
+    gap: 15px;
 }
 
-.tarjeta-de-mokepon{
+.tarjeta-de-mokepon {
     box-sizing: border-box; /*Mantiene las dimensiones de la Caja */
-    width: 300px;
+    width: 270px;
     height: 300px;
     background:#b8babb75;
-    padding: 10px;
+    padding: 0px;
     border: 1px solid black;
     border-radius: 20px;
     display: flex;
@@ -50,11 +50,22 @@ body{
     align-items: center;
     color: #03045e;
     flex-direction: column;
+    overflow: hidden; /* Esto evita que la imagen se salga del contenedor */
+    position: relative; /* Necesario para ajustes de posición */
 }
 
-.tarjeta-de-mokepon img{
-    width: 200px;
+.tarjeta-de-mokepon img {
+    width: 80%; /* En lugar de tamaño fijo, usamos porcentaje */
+    max-width: 200px; /* Tamaño máximo */
+    height: auto; /* Mantiene la proporción */
+    object-fit: contain; /* Asegura que la imagen completa sea visible */
     border-radius: 20px;
+    margin-bottom: 10px;
+}
+
+.tarjeta-de-mokepon[for="Ocelevian"] img {
+    width: 70%; /* Un poco más pequeño para la serpiente */
+    padding: 10px 0; /* Espacio vertical extra */
 }
 
 .tarjeta-de-mokepon p{
@@ -63,6 +74,36 @@ body{
 
 input{
     display: none;
+}
+
+/* Estilo cuando un Mokepon está seleccionado */
+.tarjeta-de-mokepon.seleccionado {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #4CC9F0;
+    background-color: #4361EE;
+    color: white;
+    animation: pulse 1s infinite alternate;
+}
+
+/* Estilo para el borde al pasar el mouse */
+.tarjeta-de-mokepon:hover {
+    box-shadow: 0 0 10px #3A86FF;
+}
+
+/* Animación de pulso */
+@keyframes pulse {
+    from {
+        box-shadow: 0 0 15px #4CC9F0;
+    }
+    to {
+        box-shadow: 0 0 25px #4895EF;
+    }
+}
+
+/* Cambia el color del texto cuando está seleccionado */
+.tarjeta-de-mokepon.seleccionado p {
+    color: white;
+    font-weight: bold;
 }
 
 #boton-mascota{
@@ -91,16 +132,13 @@ input{
     font-size: 20px;
 }
 
-#resultado{
-    width: 200px;
-    background-color: rgb(189, 224, 254, 0.7);
-    padding: 20px;
-    margin-top: 20px;
-    border-radius: 20px;
+#resultado {
+    min-height: 60px; /* Evita que el espacio colapse */
     display: flex;
+    align-items: center;
     justify-content: center;
-    font-size: 20px;
-    color: #03045e;
+    font-weight: bold;
+    font-size: 24px;
 }
 
 #boton-reiniciar{
@@ -115,11 +153,24 @@ input{
     font-size: 20px;
 }
 
-.ataques{
-    display: grid;
-    grid-template-columns: 100px 100px;
-    text-align: center;
-    text-align: center;
+#ataques-del-jugador, 
+#ataques-del-enemigo,
+#vidas-jugador, 
+#vidas-enemigo,
+#mascota-jugador, 
+#mascota-enemigo {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+    text-transform: uppercase; /* Asegura que el texto esté en mayúsculas */
+}
+
+.ataques {
+    gap: 10px; /* Espacio entre columnas */
+    padding: 10px;
+    background-color: rgba(189, 224, 254, 0.544);
+    border-radius: 10px;
+    margin-top: 20px;
 }
 
 .boton-ataque:disabled {
