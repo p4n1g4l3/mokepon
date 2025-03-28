@@ -189,3 +189,77 @@ input{
     transform: scale(1.05);
     transition: transform 0.2s;
 }
+
+
+
+#pantalla-inicio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.titulo-animado {
+    font-size: 5rem;
+    animation: titlate 2s infinite;
+    text-shadow: 0 0 10px #ff0000, 0 0 20px #0000ff;
+    margin-bottom: 2rem;
+}
+
+#comenzar-juego {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    background: #4361EE;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#comenzar-juego:hover {
+    transform: scale(1.1);
+    background: #3A0CA3;
+}
+
+@keyframes titlate {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.efecto-desbloqueo {
+    animation: desbloqueo 1s;
+}
+
+@keyframes desbloqueo {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2) rotate(10deg); }
+    100% { transform: scale(1); }
+}
+
+.ataque-especial {
+    animation: especial 0.5s;
+}
+
+@keyframes especial {
+    0% { text-shadow: 0 0 5px gold; }
+    100% { text-shadow: 0 0 20px red, 0 0 10px yellow; }
+}
+
+#nivel-jugador {
+    font-size: 20px;
+    color: gold;
+    background-color: rgba(0,0,0,0.7);
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+}

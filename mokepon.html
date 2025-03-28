@@ -9,7 +9,14 @@
     </head>
 
     <body>
-        <section id="seleccionar-mascota">
+        <!-- ★ NUEVA PANTALLA DE INICIO -->
+        <section id="pantalla-inicio">
+            <h1 class="titulo-animado">MOKEPON</h1>
+            <button id="comenzar-juego">¡Comenzar Aventura!</button>
+        </section>
+
+        <!-- SECCIÓN ORIGINAL (modificada para ocultarse al inicio) -->
+        <section id="seleccionar-mascota" style="display:none;">
             <h1 class="titulo">Mokepon</h1>
 
             <h2 class="subtitulo">Elige tu Mascota:</h2>
@@ -50,7 +57,7 @@
         </section>
 
 
-        <section id="seleccionar-ataque">
+        <section id="seleccionar-ataque" style="display:none;">
             <h1 class="titulo">Mokepon</h1>
             <h2 class="subtitulo">Elige tu Ataque:</h2>
             
@@ -58,7 +65,10 @@
                 <button id="boton-fuego" class="boton-ataque">Fuego 🔥</button>
                 <button id="boton-agua" class="boton-ataque">Agua 💧</button>
                 <button id="boton-tierra" class="boton-ataque">Tierra 🌱</button>
+                
+                <button id="boton-especial" class="boton-ataque" style="display:none;"></button>
             </div>
+            
 
 
             <div id="mensajes">
