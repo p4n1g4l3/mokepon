@@ -38,37 +38,42 @@ function seleccionarMascotaJugador(){
     let sectionSeleccionarAtaque= document.getElementById("seleccionar-ataque")
     sectionSeleccionarAtaque.style.display = "flex"
 
+    // seleccionar Mascota de Jugador:
     let hipodogeSeleccionado = document.getElementById("hipodoge").checked
     let capipepoSeleccionado = document.getElementById("capipepo").checked
-    let ratigueyaSeleccionado = document.getElementById("ratigueya").checked
-
-    let spanMascotaJugador = document.getElementById("mascota-jugador")
+    let dravernixSeleccionado = document.getElementById("Dravernix").checked
+    let tenebrixSeleccionado = document.getElementById("Tenebrix").checked
+    let ocelevianSeleccionado = document.getElementById("Ocelevian").checked
 
     if (hipodogeSeleccionado){
         spanMascotaJugador.innerHTML = "Hipodoge"
     }else if(capipepoSeleccionado){
         spanMascotaJugador.innerHTML = "Capipepo"
-    }else if(ratigueyaSeleccionado){
-        spanMascotaJugador.innerHTML = "Ratigueya"
+    }else if(dravernixSeleccionado){
+        spanMascotaJugador.innerHTML = "Dravernix"
+    }else if(tenebrixSeleccionado){
+        spanMascotaJugador.innerHTML = "Tenebrix"
+    }else if(ocelevianSeleccionado){
+        spanMascotaJugador.innerHTML = "Ocelevian"
     }else{
         alert("Debes seleccionar una Mascota")
     }
-
-    seleccionarMascotaEmemigo()
 }
 
 function seleccionarMascotaEmemigo(){
-    let mascotaAleatorio = aleatorio(1,3)
-    let spanMascotaEnemigo = document.getElementById("mascota-enemigo")
+    let mascotaAleatorio = aleatorio(1,5)
 
     if(mascotaAleatorio == 1){
         spanMascotaEnemigo.innerHTML = "Hipodoge"
     }else if(mascotaAleatorio == 2){
         spanMascotaEnemigo.innerHTML = "Capipepo"
+    }else if(mascotaAleatorio == 3){
+        spanMascotaEnemigo.innerHTML = "Dravernix"
+    }else if(mascotaAleatorio == 4){
+        spanMascotaEnemigo.innerHTML = "Tenebrix"
     }else{
-        spanMascotaEnemigo.innerHTML = "Ratigueya"
+        spanMascotaEnemigo.innerHTML = "Ocelevian"
     }
-
 }
 
 function ataqueFuego(){
