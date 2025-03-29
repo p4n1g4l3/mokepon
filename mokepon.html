@@ -9,19 +9,17 @@
     </head>
 
     <body>
-        <!-- ★ NUEVA PANTALLA DE INICIO -->
+        <!--  PANTALLA DE INICIO -->
         <section id="pantalla-inicio">
-            <h1 class="titulo-animado">MOKEPON</h1>
+            <h1 class="titulo-animado">MOKEPON ULTIMATE</h1>
             <button id="comenzar-juego">¡Comenzar Aventura!</button>
         </section>
-
-        <!-- SECCIÓN ORIGINAL (modificada para ocultarse al inicio) -->
+    
+        <!-- Selección de Mascota -->
         <section id="seleccionar-mascota" style="display:none;">
-            <h1 class="titulo">Mokepon</h1>
-
-            <h2 class="subtitulo">Elige tu Mascota:</h2>
-
+            <h1 class="titulo">Elige tu Guerrero</h1>
             <div class="tarjetas">
+
                 <label class="tarjeta-de-mokepon" for="hipodoge">
                     <P>Hipodoge</P>
                     <img src="./assets/hipodoge.png" alt="Hipodoge">
@@ -54,39 +52,41 @@
             </div>
 
             <button id="boton-mascota">Seleccionar</button>
-        </section>
+    </section>
 
 
         <section id="seleccionar-ataque" style="display:none;">
-            <h1 class="titulo">Mokepon</h1>
-            <h2 class="subtitulo">Elige tu Ataque:</h2>
+            <h1 class="titulo">Combate</h1>
             
-            <div>
-                <button id="boton-fuego" class="boton-ataque">Fuego 🔥</button>
-                <button id="boton-agua" class="boton-ataque">Agua 💧</button>
-                <button id="boton-tierra" class="boton-ataque">Tierra 🌱</button>
-                
-                <button id="boton-especial" class="boton-ataque" style="display:none;"></button>
+            <!-- Barra de Ataque Especial -->
+            <div class="contenedor-barra">
+                <div id="barra-especial" class="barra-especial">0/2</div>
             </div>
             
+            <!-- Botones de Ataque -->
+            <div class="contenedor-ataques">
+                <button id="boton-fuego" class="boton-ataque tipo-fuego">Fuego 🔥</button>
+                <button id="boton-agua" class="boton-ataque tipo-agua">Agua 💧</button>
+                <button id="boton-tierra" class="boton-ataque tipo-tierra">Tierra 🌱</button>
+                <button id="boton-especial" class="boton-ataque tipo-especial" style="display:none;"></button>
+            </div>
 
-
+            <!-- Mensajes y Resultados -->
             <div id="mensajes">
-                <p id="resultado">Mucha Suerte!</p>
-
-                <section id="reiniciar">
+                <p id="resultado">¡Que comience el combate!</p>
+                <section id="reiniciar" style="display:none;">
                     <button id="boton-reiniciar">Reiniciar</button>
                 </section>
             </div>
 
+            <!-- Estadísticas -->
             <div class="ataques">
-                <div>
+                <div class="jugador">
                     <p id="vidas-jugador">3</p>
                     <p id="mascota-jugador"></p>
                     <p id="ataques-del-jugador"></p>
                 </div>
-
-                <div>
+                <div class="enemigo">
                     <p id="vidas-enemigo">3</p>
                     <p id="mascota-enemigo"></p>
                     <p id="ataques-del-enemigo"></p>

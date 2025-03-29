@@ -263,3 +263,97 @@ input{
     margin-bottom: 10px;
     display: inline-block;
 }
+
+
+
+.tipo-fuego {
+    background: linear-gradient(to bottom, #FF6B00, #FF0000);
+    color: white;
+    text-shadow: 0 0 3px black;
+}
+
+.tipo-agua {
+    background: linear-gradient(to bottom, #00B4FF, #0033FF);
+    color: white;
+}
+
+.tipo-tierra {
+    background: linear-gradient(to bottom, #8B4513, #CD853F);
+    color: white;
+}
+
+.tipo-especial {
+    background: linear-gradient(45deg, #FF00FF, #FF8C00, #FF0080);
+    color: white;
+    animation: brillo-especial 2s infinite;
+}
+
+
+@keyframes brillo-especial {
+    0% { box-shadow: 0 0 5px #FF00FF; }
+    33% { box-shadow: 0 0 20px #FF8C00; }
+    66% { box-shadow: 0 0 20px #FF0080; }
+    100% { box-shadow: 0 0 5px #FF00FF; }
+}
+
+.animacion-ataque {
+    transform: scale(1.1);
+    filter: brightness(1.5);
+    transition: all 0.2s;
+}
+
+.efecto-ataque {
+    animation: ataque 0.8s;
+}
+
+@keyframes ataque {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(10px); }
+    50% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+
+.contenedor-barra {
+    width: 200px;
+    height: 30px;
+    background: #333;
+    border-radius: 15px;
+    margin: 15px auto;
+    overflow: hidden;
+}
+
+.barra-especial {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, #4CC9F0, #4361EE);
+    transition: width 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+
+.victoria {
+    color: #4CAF50;
+    animation: victoria 0.5s;
+}
+
+.derrota {
+    color: #F44336;
+    animation: derrota 0.5s;
+}
+
+@keyframes victoria {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes derrota {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}

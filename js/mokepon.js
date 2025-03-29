@@ -1,227 +1,219 @@
-// Variables Globales
+// Variables Globales MEJORADAS
 let nivel = 1;
 let experiencia = 0;
-let ataquesEspeciales = {
-    Hipodoge: "Terremoto 🌍",
-    Capipepo: "Hoja Afilada 🍃", 
-    Dravernix: "Llamarada 🔥",
-    Tenebrix: "Sombras 👻",
-    Ocelevian: "Tsunami 🌊"
+let comboGanador = 0; // Para ataques consecutivos
+const tipos = {
+    FUEGO: { fuerteContra: ['TIERRA', 'PLANTA'], debilContra: ['AGUA'] },
+    AGUA: { fuerteContra: ['FUEGO'], debilContra: ['PLANTA', 'ELECTRICO'] },
+    TIERRA: { fuerteContra: ['ELECTRICO', 'VENENO'], debilContra: ['AGUA', 'PLANTA'] },
+    PLANTA: { fuerteContra: ['AGUA', 'TIERRA'], debilContra: ['FUEGO'] },
+    ELECTRICO: { fuerteContra: ['AGUA'], debilContra: ['TIERRA'] }
 };
 
-let ataqueJugador;
-let ataqueEnemigo;
-let vidasJugador = 3;
-let vidasEnemigo = 3;
+const mokepones = {
+    Hipodoge: { tipo: 'TIERRA', especial: 'TERREMOTO 🌍' },
+    Capipepo: { tipo: 'PLANTA', especial: 'HOJA AFILADA 🍃' },
+    Dravernix: { tipo: 'FUEGO', especial: 'LLAMARADA 🔥' },
+    Tenebrix: { tipo: 'ELECTRICO', especial: 'RAYO OSCURIDAD ⚡' },
+    Ocelevian: { tipo: 'AGUA', especial: 'TSUNAMI 🌊' }
+};
 
+let ataqueJugador, ataqueEnemigo;
+let vidasJugador = 3, vidasEnemigo = 3;
+let mascotaJugador, mascotaEnemigo;
+
+
+// FUNCIÓN PRINCIPAL INICIAR JUEGO
 function iniciarJuego(){
-    // Configuración inicial de pantallas
     document.getElementById("pantalla-inicio").style.display = "flex";
     document.getElementById("seleccionar-mascota").style.display = "none";
     document.getElementById("seleccionar-ataque").style.display = "none";
     document.getElementById("reiniciar").style.display = "none";
 
-    // Evento para el botón de comenzar
     document.getElementById("comenzar-juego").addEventListener("click", () => {
         document.getElementById("pantalla-inicio").style.display = "none";
         document.getElementById("seleccionar-mascota").style.display = "flex";
     });
 
-    // Inicializar UI de nivel
-    actualizarNivel();
-
     // Configurar botones
     document.getElementById("boton-mascota").addEventListener("click", seleccionarMascotaJugador);
-    document.getElementById("boton-fuego").addEventListener("click", ataqueFuego);
-    document.getElementById("boton-agua").addEventListener("click", ataqueAgua);
-    document.getElementById("boton-tierra").addEventListener("click", ataqueTierra);
-    document.getElementById("boton-especial").addEventListener("click", function() {
-        const mascota = document.getElementById("mascota-jugador").textContent;
-        ataqueEspecial(mascota);
-    });
+    document.getElementById("boton-fuego").addEventListener("click", () => ejecutarAtaque("FUEGO"));
+    document.getElementById("boton-agua").addEventListener("click", () => ejecutarAtaque("AGUA"));
+    document.getElementById("boton-tierra").addEventListener("click", () => ejecutarAtaque("TIERRA"));
+    document.getElementById("boton-especial").addEventListener("click", ataqueEspecial);
     document.getElementById("boton-reiniciar").addEventListener("click", reiniciarJuego);
 }
 
+
+//  SELECCIÓN DE MASCOTAS
 function seleccionarMascotaJugador() {
-    const mokepons = [
-        { id: "hipodoge", nombre: "Hipodoge" },
-        { id: "capipepo", nombre: "Capipepo" },
-        { id: "Dravernix", nombre: "Dravernix" },
-        { id: "Tenebrix", nombre: "Tenebrix" },
-        { id: "Ocelevian", nombre: "Ocelevian" }
-    ];
-
-    // Resetear selección visual
-    document.querySelectorAll('.tarjeta-de-mokepon').forEach(tarjeta => {
-        tarjeta.classList.remove('seleccionado');
-    });
-
-    const mokeponSeleccionado = mokepons.find(m => 
-        document.getElementById(m.id).checked
-    );
-
+    const mokeponSeleccionado = [...document.querySelectorAll('input[name="mascota"]')].find(input => input.checked);
+    
     if (!mokeponSeleccionado) {
         alert("¡Debes seleccionar una Mascota!");
         return;
     }
 
+    mascotaJugador = mokeponSeleccionado.id;
     document.querySelector(`label[for="${mokeponSeleccionado.id}"]`).classList.add('seleccionado');
-    document.getElementById("mascota-jugador").innerHTML = mokeponSeleccionado.nombre;
+    document.getElementById("mascota-jugador").textContent = mascotaJugador;
 
-    // Mostrar sección de ataques
+    // Transición a ataques
     document.getElementById("seleccionar-mascota").style.display = "none";
     document.getElementById("seleccionar-ataque").style.display = "flex";
 
-    seleccionarMascotaEmemigo();
+    seleccionarMascotaEnemigo();
+    actualizarUI();
 }
 
-function seleccionarMascotaEmemigo() {
-    const spanMascotaEnemigo = document.getElementById("mascota-enemigo");
-    const mascotaAleatorio = aleatorio(1,5);
-
-    if(mascotaAleatorio == 1) spanMascotaEnemigo.innerHTML = "Hipodoge";
-    else if(mascotaAleatorio == 2) spanMascotaEnemigo.innerHTML = "Capipepo";
-    else if(mascotaAleatorio == 3) spanMascotaEnemigo.innerHTML = "Dravernix";
-    else if(mascotaAleatorio == 4) spanMascotaEnemigo.innerHTML = "Tenebrix";
-    else spanMascotaEnemigo.innerHTML = "Ocelevian";
+function seleccionarMascotaEnemigo() {
+    const opciones = Object.keys(mokepones);
+    mascotaEnemigo = opciones[aleatorio(0, opciones.length - 1)];
+    document.getElementById("mascota-enemigo").textContent = mascotaEnemigo;
 }
 
-function ataqueFuego() {
-    ataqueJugador = "FUEGO";
-    ataqueAleatorioEnemigo();
-}
 
-function ataqueAgua() {
-    ataqueJugador = "AGUA";
-    ataqueAleatorioEnemigo();
-}
-
-function ataqueTierra() {
-    ataqueJugador = "TIERRA";
-    ataqueAleatorioEnemigo();
-}
-
-function ataqueEspecial(mascota) {
-    switch(mascota) {
-        case "Hipodoge": ataqueJugador = "TERREMOTO"; break;
-        case "Capipepo": ataqueJugador = "HOJA_AFILADA"; break;
-        case "Dravernix": ataqueJugador = "LLAMARADA"; break;
-        case "Tenebrix": ataqueJugador = "SOMBRAS"; break;
-        case "Ocelevian": ataqueJugador = "TSUNAMI"; break;
-        default: ataqueJugador = "RAYO";
-    }
-    
-    // Efecto visual
-    const mascotaUI = document.getElementById("mascota-jugador");
-    mascotaUI.classList.add("ataque-especial");
-    
+//  SISTEMA DE ATAQUES
+function ejecutarAtaque(tipo) {
+    ataqueJugador = tipo;
+    animarAtaque(tipo);
     setTimeout(() => {
-        mascotaUI.classList.remove("ataque-especial");
         ataqueAleatorioEnemigo();
-    }, 800);
+    }, 1000);
+}
+
+function ataqueEspecial() {
+    if (comboGanador < 2) return;
+    
+    ataqueJugador = "ESPECIAL";
+    const tipoEspecial = mokepones[mascotaJugador].especial;
+    document.getElementById("resultado").textContent = `¡${tipoEspecial}!`;
+    
+    animarAtaque('especial');
+    setTimeout(() => {
+        ataqueAleatorioEnemigo();
+        comboGanador = 0;
+        actualizarUI();
+    }, 1500);
 }
 
 function ataqueAleatorioEnemigo() {
-    const ataqueAleatorio = aleatorio(1,3);
-    ataqueEnemigo = (ataqueAleatorio == 1) ? "FUEGO" : 
-                   (ataqueAleatorio == 2) ? "AGUA" : "TIERRA";
+    const opciones = Object.keys(tipos);
+    ataqueEnemigo = opciones[aleatorio(0, opciones.length - 1)];
     combate();
 }
 
+
+// NÚCLEO DEL COMBATE
 function combate() {
-    const spanVidasJugador = document.getElementById("vidas-jugador");
-    const spanVidasEnemigo = document.getElementById("vidas-enemigo");
-    let danio = 1;
-
-    // Ataques especiales hacen más daño
-    if (["TERREMOTO", "HOJA_AFILADA", "LLAMARADA", "SOMBRAS", "TSUNAMI"].includes(ataqueJugador)) {
-        danio = 1.5;
-    }
-
-    if (ataqueEnemigo == ataqueJugador) {
-        crearMensaje("EMPATE");
-    } else if (
-        (ataqueJugador == "FUEGO" && ataqueEnemigo == "TIERRA") ||
-        (ataqueJugador == "AGUA" && ataqueEnemigo == "FUEGO") ||
-        (ataqueJugador == "TIERRA" && ataqueEnemigo == "AGUA") ||
-        (ataqueJugador.length > 5) // Ataques especiales
-    ) {
-        crearMensaje("GANASTE");
-        vidasEnemigo -= danio;
-        spanVidasEnemigo.innerHTML = Math.max(0, Math.floor(vidasEnemigo));
-        
-        if (vidasEnemigo <= 0) {
-            ganarBatalla();
-            crearMensajeFinal("FELICITACIONES GANASTE");
-        }
-    } else {
-        crearMensaje("PERDISTE");
+    const resultado = calcularResultado();
+    const esVictoria = resultado.includes("GANASTE");
+    
+    // Efectos de daño
+    if (esVictoria) {
+        vidasEnemigo -= (ataqueJugador === "ESPECIAL") ? 2 : 1;
+        comboGanador++;
+    } else if (resultado.includes("PERDISTE")) {
         vidasJugador -= 1;
-        spanVidasJugador.innerHTML = vidasJugador;
+        comboGanador = 0;
     }
 
+    // Actualizar UI
+    actualizarUI();
+    crearMensaje(resultado);
     revisarVidas();
-}
 
-function ganarBatalla() {
-    if (vidasEnemigo <= 0) {
-        experiencia += 50;
-        actualizarNivel();
-        
-        if (experiencia >= 100) {
-            nivel++;
-            experiencia = 0;
-            desbloquearAtaqueEspecial();
-        }
-    }
-}
-
-function actualizarNivel() {
-    const nivelUI = document.getElementById("nivel-jugador") || document.createElement("p");
-    nivelUI.id = "nivel-jugador";
-    nivelUI.textContent = `Nivel ${nivel} (${experiencia}/100 XP)`;
-    if (!document.getElementById("nivel-jugador")) {
-        document.querySelector(".ataques").prepend(nivelUI);
-    }
-}
-
-function desbloquearAtaqueEspecial() {
-    const botonEspecial = document.getElementById("boton-especial");
-    const mascota = document.getElementById("mascota-jugador").textContent;
-    
-    botonEspecial.textContent = ataquesEspeciales[mascota] || "Rayo ⚡";
-    botonEspecial.style.display = "inline-block";
-    botonEspecial.classList.add("efecto-desbloqueo");
-    
+    document.getElementById("resultado").classList.add(esVictoria ? "victoria" : "derrota");
     setTimeout(() => {
-        botonEspecial.classList.remove("efecto-desbloqueo");
+        document.getElementById("resultado").classList.remove("victoria", "derrota");
     }, 1000);
+}
+
+function calcularResultado() {
+    if (ataqueJugador === ataqueEnemigo) return "EMPATE";
+    if (ataqueJugador === "ESPECIAL") return "GANASTE CON ATAQUE ESPECIAL!";
+    
+    const tipoJugador = mokepones[mascotaJugador].tipo;
+    const tipoEnemigo = mokepones[mascotaEnemigo].tipo;
+    
+    // Sistema de ventajas por tipo
+    if (tipos[tipoJugador].fuerteContra.includes(tipoEnemigo)) {
+        return "GANASTE (VENTAJA DE TIPO!)";
+    } else if (tipos[tipoEnemigo].fuerteContra.includes(tipoJugador)) {
+        return "PERDISTE (DESVENTAJA DE TIPO)";
+    }
+    
+    // Sistema clásico como respaldo
+    if (
+        (ataqueJugador === "FUEGO" && ataqueEnemigo === "TIERRA") ||
+        (ataqueJugador === "AGUA" && ataqueEnemigo === "FUEGO") ||
+        (ataqueJugador === "TIERRA" && ataqueEnemigo === "AGUA")
+    ) {
+        return "GANASTE";
+    }
+    
+    return "PERDISTE";
+}
+
+//  EFECTOS VISUALES
+function animarAtaque(tipo) {
+    const boton = document.getElementById(`boton-${tipo.toLowerCase()}`);
+    const jugadorUI = document.getElementById("mascota-jugador");
+    
+    // Animación del botón
+    boton.classList.add("animacion-ataque");
+    setTimeout(() => boton.classList.remove("animacion-ataque"), 500);
+    
+    // Efecto en la mascota
+    jugadorUI.classList.add("efecto-ataque");
+    setTimeout(() => jugadorUI.classList.remove("efecto-ataque"), 800);
+}
+
+
+//  SISTEMA DE PROGRESIÓN
+function actualizarUI() {
+    document.getElementById("vidas-jugador").textContent = vidasJugador;
+    document.getElementById("vidas-enemigo").textContent = vidasEnemigo;
+    
+    // Barra de progreso especial
+    const barraEspecial = document.getElementById("barra-especial");
+    barraEspecial.style.width = `${(comboGanador/2)*100}%`;
+    barraEspecial.textContent = comboGanador >= 2 ? "¡LISTO!" : `${comboGanador}/2`;
+    
+    // Mostrar/Ocultar botón especial
+    const botonEspecial = document.getElementById("boton-especial");
+    botonEspecial.style.display = comboGanador >= 2 ? "block" : "none";
+    if (comboGanador >= 2) {
+        botonEspecial.textContent = mokepones[mascotaJugador].especial;
+        botonEspecial.classList.add("brillo-especial");
+    } else {
+        botonEspecial.classList.remove("brillo-especial");
+    }
+}
+
+
+//  FUNCIONES AUXILIARES
+function crearMensaje(resultado) {
+    document.getElementById("resultado").textContent = resultado;
+    document.getElementById("ataques-del-jugador").textContent += `${ataqueJugador} | `;
+    document.getElementById("ataques-del-enemigo").textContent += `${ataqueEnemigo} | `;
 }
 
 function revisarVidas() {
     if (vidasEnemigo <= 0) {
-        crearMensajeFinal("FELICITACIONES GANASTE");
+        experiencia += 30;
+        crearMensajeFinal("¡VICTORIA! +30 XP");
     } else if (vidasJugador <= 0) {
-        crearMensajeFinal("LO SIENTO PERDISTE");
+        crearMensajeFinal("GAME OVER");
     }
 }
 
-function crearMensaje(resultado) {
-    document.getElementById("resultado").innerHTML = resultado;
-    document.getElementById("ataques-del-jugador").innerHTML += `${ataqueJugador} | `;
-    document.getElementById("ataques-del-enemigo").innerHTML += `${ataqueEnemigo} | `;
-}
-
-function crearMensajeFinal(resultadoFinal) {
-    document.getElementById("resultado").innerHTML = resultadoFinal;
-    
-    // Deshabilitar todos los botones
-    document.querySelectorAll(".boton-ataque, #boton-especial").forEach(boton => {
-        boton.disabled = true;
-    });
-    
+function crearMensajeFinal(mensaje) {
+    document.getElementById("resultado").textContent = mensaje;
+    document.querySelectorAll(".boton-ataque").forEach(b => b.disabled = true);
     document.getElementById("reiniciar").style.display = "block";
 }
+
 
 function reiniciarJuego() {
     location.reload();
